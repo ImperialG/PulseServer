@@ -1,13 +1,34 @@
-var http = require('http');
+var express = require('express');
+var multer  = require('multer');
 
-const PORT = 8080;
+var app = express();
 
-function handleRequest(request, response) {
-	response.end('It worls!! Path Hit: ' + request.url);
-}
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/recordings')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '.wav');
+  }
+})
 
-var server = http.createServer(handleRequest);
+var upload = multer({ storage: storage })
+app.use(upload.single('audio'));
 
-server.listen(PORT, function() {
-	console.log("Server listening on: http://localhost:%s", PORT);
+app.get('/', function(req, res){
+  res.send('hello world');
+});
+
+app.post('/', function(req, res){
+    console.log(req.file.originalname) // form fields
+    res.send('File Stored');
+});
+
+
+
+var server = app.listen(8000, function() {
+    var host = server.address().address;
+    var port = server.address().port;
+
+    console.log('Example app listening at http://%s:%s', host, port);
 });
