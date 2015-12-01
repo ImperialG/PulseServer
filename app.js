@@ -4,11 +4,23 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var multer  = require('multer');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/recordings')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '.wav');
+  }
+})
+
+var upload = multer({ storage: storage })
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,6 +33,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(upload.single('audio'));
 
 app.use('/', routes);
 app.use('/users', users);
@@ -56,5 +69,19 @@ app.use(function(err, req, res, next) {
   });
 });
 
+//GET Requests
+
+//POST Requests
+app.post('/file-upload', function(req, res){
+    console.log('Received file ' + req.file.originalname); 
+    res.send('File Stored');
+});
 
 module.exports = app;
+
+var server = app.listen(3000, function() {
+    var host = server.address().address;
+    var port = server.address().port;
+
+    console.log('Pulse server listening at http://%s:%s', host, port);
+});
