@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer  = require('multer');
+var exec = require('child_process').exec;
 
 //var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -75,6 +76,18 @@ app.use(function(err, req, res, next) {
 //POST Requests
 router.post('/file-upload', function(req, res){
     console.log('Received file ' + req.file.originalname); 
+    try {
+      process.chdir('openSMILE-2.1.0/');
+    } catch (err) {
+      console.log('chdir: ' + err);
+    }
+    var cmd = 'SMILExtract -C config/demo/demo1\_energy.conf -I ' + '../public/recordings/' +req.file.filename+ '.wav' + ' -O ' + req.file.originalname + '.energy.csv';
+    exec (cmd, function(error, stdout, stderr) {
+      console.log(stdout);
+    });
+    var csv_file = req.file.originalname + '.energy.csv';
+    res.send(csv_file);
+    
     res.send('File Stored');
 });
 
