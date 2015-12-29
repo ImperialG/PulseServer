@@ -81,7 +81,7 @@ router.post('/file-upload', function(req, res){
     } catch (err) {
       console.log('chdir: ' + err);
     }
-    var cmd = 'SMILExtract -C config/demo/demo1\_energy.conf -I ' + '../public/recordings/' +req.file.filename+ '.wav' + ' -O ' + req.file.originalname + '.energy.csv';
+    var cmd = 'SMILExtract -C config/demo/demo1\_energy.conf -I ' + '../public/recordings/' +req.file.filename+ ' -O ' + req.file.originalname + '.energy.csv';
     exec (cmd, function(error, stdout, stderr) {
       console.log(cmd);
       console.log(stderr);
