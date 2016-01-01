@@ -74,21 +74,24 @@ app.use(function(err, req, res, next) {
 //GET Requests
 
 //POST Requests
-router.post('/file-upload', function(req, res){
-    console.log('Received file ' + req.file.originalname); 
+router.post('/file-upload', function (req, res) {
+    console.log('Received file ' + JSON.stringify(req.file));
     try {
-      process.chdir('openSMILE-2.1.0/');
+        process.chdir('openSMILE-2.1.0/');
     } catch (err) {
-      console.log('chdir: ' + err);
-    }
-    var cmd = 'SMILExtract -C config/demo/demo1\_energy.conf -I ' + '../public/recordings/' +req.file.filename+ ' -O ' + req.file.originalname + '.energy.csv';
-    exec (cmd, function(error, stdout, stderr) {
-      console.log(cmd);
-      console.log(stderr);
+        console.log('chdir: ' + err);
+    } 
+    var cmd = 'SMILExtract -C config/demo/demo1\_energy.conf -I ' + '../' + req.file.path + ' -O ' + '../' + req.file.path + '.energy.csv';
+    exec(cmd, function (error, stdout, stderr) {
+        console.log(cmd);
+        console.log(stderr);
     });
-    var csv_file = req.file.originalname + '.energy.csv';
-    res.send('File Stored and CSV file produced');
+    var csv_file = req.file + '.energy.csv';
+    res.json({
+        "heartrate": 75
+    });
 });
+
 
 module.exports = app;
 
