@@ -29,7 +29,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -76,20 +76,40 @@ app.use(function (err, req, res, next) {
 
 //POST Requests
 router.post('/file-upload', function (req, res) {
-    console.log('Received file ' + JSON.stringify(req.file));
+    console.log('Received file ' + JSON.stringify(req.file.originalname));
     try {
-        process.chdir('openSMILE-2.1.0/');
+        process.chdir('openSMILE-2.2rc1/');
     } catch (err) {
         console.log('chdir: ' + err);
     } 
-    var cmd = 'SMILExtract -C config/demo/demo1\_energy.conf -I ' + '../' + req.file.path + ' -O ' + '../' + req.file.path + '.energy.csv';
+    //var cmd = 'SMILExtract -C config/demo/demo1\_energy.conf -I ' + '../' + req.file.path + ' -O ' + '../' + req.file.path + '.energy.csv';
+    var cmd = 'python predict.py ' + '../' + req.file.path + ' ' + '../' + req.file.path + '_hr.txt'
     exec(cmd, function (error, stdout, stderr) {
         console.log(cmd);
         console.log(stderr);
     });
-    var csv_file = req.file + '.energy.csv';
+
+    var hr = '../' + req.file.path + '_hr.txt';
+
+    var lineReader = require('readline').createInterface({
+      input: require('fs').createReadStream(hr);
+    });
+
+    var ans = 0;
+
+    lineReader.on('line', function (line) {
+      ans = line;
+      console.log(line);
+    });
+
+    var del = 'rm ' + hr;
+    exec(del, function (error, stdout, stderr) {
+        console.log(del);
+        console.log(stderr);
+    });
+
     res.json({
-        "heartrate": 75
+        "heartrate": ans;
     });
 });
 
