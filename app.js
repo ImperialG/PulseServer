@@ -109,10 +109,12 @@ router.post('/file-upload', function (req, res) {
 
     
     exec(hr, function (error, stdout, stderr) {
-        var ans = stdout;
         console.log(hr);
         console.log(stdout);
         console.log(stderr);
+        res.json({
+          "heartrate": stdout
+        });
     })
 /*
     lineReader.on('line', function (line) {
@@ -126,9 +128,7 @@ router.post('/file-upload', function (req, res) {
         console.log(stderr);
     });
 */
-    res.json({
-        "heartrate": ans
-    });
+    
 });
 
 module.exports = app;
