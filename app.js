@@ -100,35 +100,23 @@ router.post('/file-upload', function (req, res) {
     });
 
     var hr = 'head -n 1 ../' + req.file.path + '_hr.txt';
-/*
-    var lineReader = require('readline').createInterface({
-      input: require('fs').createReadStream('../' + req.file.path + '_hr.txt'),
-      terminal : false
-    });
-*/
-
     
     exec(hr, function (error, stdout, stderr) {
         console.log(hr);
         console.log(stdout);
         console.log(stderr);
-  /*      res.json({
-          "heartrate": stdout
-        }); */
-        res.send(stdout);
+        res.json({
+          "heartrate": stderr
+        }); 
+        var del = 'rm ' + '../' + req.file.path + '_hr.txt';
+        exec(del, function (error, stdout, stderr) {
+          console.log(del);
+          console.log(stderr);
+       });
+        //res.send(stdout);
     })
-/*
-    lineReader.on('line', function (line) {
-      ans = line;
-      console.log(line);
-    });
 
-    var del = 'rm ' + '../' + req.file.path + '_hr.txt';
-    exec(del, function (error, stdout, stderr) {
-        console.log(del);
-        console.log(stderr);
-    });
-*/
+    
     
 });
 
