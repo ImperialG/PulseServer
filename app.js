@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var multer = require('multer');
 var sys = require('sys');
 var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
 
 //var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -99,24 +100,30 @@ router.post('/file-upload', function (req, res) {
         console.log(stderr);
     });
 
-    var hr = 'head -n 1 ../' + req.file.path + '_hr.txt';
+    //var hr = 'head -n 1 ../' + req.file.path + '_hr.txt';
     
+    var hr = spawn('hr', [
+        '-n', '1', '../' + req.file.path + '_hr.txt'
+    ]);
+
+    child.stdout.pipe(res);
+/*
     exec(hr, function (error, stdout, stderr) {
         console.log(hr);
         console.log(stdout);
         console.log(stderr);
         res.json({
-          "heartrate": stderr
+          "heartrate": stdout
         }); 
-        var del = 'rm ' + '../' + req.file.path + '_hr.txt';
+        
+        res.send(stdout);
+    })
+*/
+    var del = 'rm ' + '../' + req.file.path + '_hr.txt';
         exec(del, function (error, stdout, stderr) {
           console.log(del);
           console.log(stderr);
        });
-        //res.send(stdout);
-    })
-
-    
     
 });
 
