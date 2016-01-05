@@ -106,7 +106,7 @@ router.post('/file-upload', function (req, res) {
         '-n', '1', '../' + req.file.path + '_hr.txt'
     ]);
 
-    hr.stdout.pipe(res);
+    //hr.stdout.pipe(res);
 /*
     exec(hr, function (error, stdout, stderr) {
         console.log(hr);
