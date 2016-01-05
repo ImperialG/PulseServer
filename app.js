@@ -99,7 +99,7 @@ router.post('/file-upload', function (req, res) {
     var hr = '../' + req.file.path + '_hr.txt';
 
     var lineReader = require('readline').createInterface({
-      input: require('fs').createReadStream(hr)
+      input: require('fs').createReadStream(hr),
       terminal : false
     });
 
