@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer = require('multer');
+var sys = require('sys');
 var exec = require('child_process').exec;
 
 //var routes = require('./routes/index');
@@ -86,7 +87,7 @@ router.post('/file-upload', function (req, res) {
 
     var touch = 'touch ' + '../' + req.file.path + '_hr.txt';
     exec(touch, function (error, stdout, stderr) {
-        console.log(cmd);
+        console.log(touch);
         console.log(stderr);
     });
 
@@ -109,13 +110,13 @@ router.post('/file-upload', function (req, res) {
       ans = line;
       console.log(line);
     });
-/*
+
     var del = 'rm ' + '../' + req.file.path + '_hr.txt';
     exec(del, function (error, stdout, stderr) {
         console.log(del);
         console.log(stderr);
     });
-*/
+    
     res.json({
         "heartrate": ans
     });
