@@ -110,11 +110,12 @@ router.post('/file-upload', function (req, res) {
     
     exec(hr, function (error, stdout, stderr) {
         console.log(hr);
-        //console.log(stdout);
+        console.log(stdout);
         console.log(stderr);
-        res.json({
+  /*      res.json({
           "heartrate": stdout
-        });
+        }); */
+        res.send(stdout);
     })
 /*
     lineReader.on('line', function (line) {
