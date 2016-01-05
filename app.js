@@ -76,6 +76,19 @@ app.use(function (err, req, res, next) {
 //GET Requests
 
 //POST Requests
+
+function run(cmd, cb) {
+  var spawn = require('child_process').spawn;
+  var command = spawn(cmd);
+  var result = '';
+  command.stdout.on('data', function(data) {
+    result += data.toString();
+  });
+  command.on('close', function(code) {
+    cb(result);
+  });
+}
+
 router.post('/file-upload', function (req, res) {
     console.log('Received file ' + JSON.stringify(req.file.originalname) + ' as ' + req.file.filename);
     try {
@@ -98,7 +111,7 @@ router.post('/file-upload', function (req, res) {
         console.log(stdout);
         console.log(stderr);
     });
-
+/*
     var hr = 'head -n 1 ../' + req.file.path + '_hr.txt';
     
     exec(hr, function (error, stdout, stderr) {
@@ -110,7 +123,11 @@ router.post('/file-upload', function (req, res) {
         }); 
         //res.send(stdout);
     })
+*/
 
+    run('head -n 1 ../' + req.file.path + '_hr.txt', function(message) {
+        res.send(message);
+    });
     
     
 });
