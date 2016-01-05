@@ -109,13 +109,13 @@ router.post('/file-upload', function (req, res) {
       ans = line;
       console.log(line);
     });
-
+/*
     var del = 'rm ' + '../' + req.file.path + '_hr.txt';
     exec(del, function (error, stdout, stderr) {
         console.log(del);
         console.log(stderr);
     });
-
+*/
     res.json({
         "heartrate": ans
     });
