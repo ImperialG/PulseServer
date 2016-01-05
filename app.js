@@ -83,14 +83,15 @@ router.post('/file-upload', function (req, res) {
         console.log('chdir: ' + err);
     } 
     //var cmd = 'SMILExtract -C config/demo/demo1\_energy.conf -I ' + '../' + req.file.path + ' -O ' + '../' + req.file.path + '.energy.csv';
-    var cmd = 'python predict.py ' + '../' + req.file.path + ' ' + '../' + req.file.path + '_hr.txt'
-    exec(cmd, function (error, stdout, stderr) {
+
+    var touch = 'touch ' + '../' + req.file.path + '_hr.txt';
+    exec(touch, function (error, stdout, stderr) {
         console.log(cmd);
         console.log(stderr);
     });
 
-    var touch = 'touch ' + '../' + req.file.path + '_hr.txt';
-    exec(touch, function (error, stdout, stderr) {
+    var cmd = 'python predict.py ' + '../' + req.file.path + ' ' + '../' + req.file.path + '_hr.txt'
+    exec(cmd, function (error, stdout, stderr) {
         console.log(cmd);
         console.log(stderr);
     });
