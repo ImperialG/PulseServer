@@ -109,6 +109,7 @@ router.post('/file-upload', function (req, res) {
 
     var ans = ' ';
     exec(hr, function (error, stdout, stderr) {
+        ans = stdout;
         console.log(hr);
         console.log(stdout);
         console.log(stderr);
@@ -126,7 +127,7 @@ router.post('/file-upload', function (req, res) {
     });
 */
     res.json({
-        "heartrate": 75
+        "heartrate": ans
     });
 });
 
