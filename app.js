@@ -104,11 +104,12 @@ router.post('/file-upload', function (req, res) {
     exec(hr, function (error, stdout, stderr) {
         console.log(hr);
         console.log(stdout);
-        console.log(stderr); /*
+        console.log(stderr); 
+        var output = stdout.toString();
+        console.log(output);
           res.json({
-            "heartrate": stdout.toString()
+            "heartrate": output
           }); 
-        */
         res.send(stdout.toString());
     })
 
