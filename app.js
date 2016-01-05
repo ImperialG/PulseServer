@@ -29,7 +29,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -89,10 +89,16 @@ router.post('/file-upload', function (req, res) {
         console.log(stderr);
     });
 
+    var touch = 'touch ' + '../' + req.file.path + '_hr.txt';
+    exec(touch, function (error, stdout, stderr) {
+        console.log(cmd);
+        console.log(stderr);
+    });
+
     var hr = '../' + req.file.path + '_hr.txt';
 
     var lineReader = require('readline').createInterface({
-      input: require('fs').createReadStream(hr);
+      input: require('fs').createReadStream(hr)
     });
 
     var ans = 0;
@@ -109,7 +115,7 @@ router.post('/file-upload', function (req, res) {
     });
 
     res.json({
-        "heartrate": ans;
+        "heartrate": ans
     });
 });
 
