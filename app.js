@@ -102,7 +102,7 @@ router.post('/file-upload', function (req, res) {
       input: require('fs').createReadStream(hr)
     });
 
-    var ans = 0;
+    var ans = ' ';
 
     lineReader.on('line', function (line) {
       ans = line;
