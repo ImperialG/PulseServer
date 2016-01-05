@@ -76,7 +76,7 @@ app.use(function (err, req, res, next) {
 
 //POST Requests
 router.post('/file-upload', function (req, res) {
-    console.log('Received file ' + JSON.stringify(req.file.originalname));
+    console.log('Received file ' + JSON.stringify(req.file.originalname) + ' as ' + req.file.filename);
     try {
         process.chdir('openSMILE-2.2rc1/');
     } catch (err) {
