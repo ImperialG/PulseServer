@@ -88,24 +88,32 @@ router.post('/file-upload', function (req, res) {
     var touch = 'touch ' + '../' + req.file.path + '_hr.txt';
     exec(touch, function (error, stdout, stderr) {
         console.log(touch);
+        console.log(stdout);
         console.log(stderr);
     });
 
     var cmd = 'python predict.py ' + '../' + req.file.path + ' ' + '../' + req.file.path + '_hr.txt'
     exec(cmd, function (error, stdout, stderr) {
         console.log(cmd);
+        console.log(stdout);
         console.log(stderr);
     });
 
-    var hr = '../' + req.file.path + '_hr.txt';
-
+    var hr = 'head -n 1 ../' + req.file.path + '_hr.txt';
+/*
     var lineReader = require('readline').createInterface({
       input: require('fs').createReadStream('../' + req.file.path + '_hr.txt'),
       terminal : false
     });
+*/
 
     var ans = ' ';
-
+    exec(hr, function (error, stdout, stderr) {
+        console.log(hr);
+        console.log(stdout);
+        console.log(stderr);
+    })
+/*
     lineReader.on('line', function (line) {
       ans = line;
       console.log(line);
@@ -116,9 +124,9 @@ router.post('/file-upload', function (req, res) {
         console.log(del);
         console.log(stderr);
     });
-    
+*/
     res.json({
-        "heartrate": ans
+        "heartrate": 75
     });
 });
 
