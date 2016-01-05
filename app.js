@@ -100,6 +100,7 @@ router.post('/file-upload', function (req, res) {
 
     var lineReader = require('readline').createInterface({
       input: require('fs').createReadStream(hr)
+      terminal : false
     });
 
     var ans = ' ';
