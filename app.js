@@ -102,11 +102,11 @@ router.post('/file-upload', function (req, res) {
 
     //var hr = 'head -n 1 ../' + req.file.path + '_hr.txt';
     
-    var hr = spawn('hr', [
+    var hr = spawn('head', [
         '-n', '1', '../' + req.file.path + '_hr.txt'
     ]);
 
-    child.stdout.pipe(res);
+    hr.stdout.pipe(res);
 /*
     exec(hr, function (error, stdout, stderr) {
         console.log(hr);
@@ -124,7 +124,8 @@ router.post('/file-upload', function (req, res) {
           console.log(del);
           console.log(stderr);
        });
-    
+
+    res.send();
 });
 
 module.exports = app;
