@@ -95,6 +95,9 @@ router.post('/file-upload', function (req, res) {
     var cmd = 'python predict.py ' + '../' + req.file.path + ' ' + '../' + req.file.path + '_hr.txt'
     exec(cmd, function (error, stdout, stderr) {
         console.log(cmd);
+        res.json({
+            "heartrate": stdout
+        })
         console.log(stdout);
         console.log(stderr);
     });
@@ -104,10 +107,10 @@ router.post('/file-upload', function (req, res) {
     exec('node -v', function (error, stdout, stderr) {
         console.log(hr);
         console.log(stdout);
-        console.log(stderr); 
+        console.log(stderr); /*
           res.json({
             "heartrate": stdout
-          }); 
+          }); */
         //res.send(stdout.toString());
     })
 
