@@ -90,36 +90,29 @@ router.post('/file-upload', function (req, res) {
         console.log(touch);
         console.log(stdout);
         console.log(stderr);
-    });
-
-    var cmd = 'python predict.py ' + '../' + req.file.path + ' ' + '../' + req.file.path + '_hr.txt'
-    exec(cmd, function (error, stdout, stderr) {
-        console.log(cmd);
-        res.json({
-            "heartrate": stdout
-        })
-        console.log(stdout);
-        console.log(stderr);
-        var rm_txt = 'rm ../' + req.file.path + '_hr.txt';
-    
-        exec(rm_txt, function (error, stdout, stderr) {
-            console.log(rm_txt);
+        var cmd = 'python predict.py ' + '../' + req.file.path + ' ' + '../' + req.file.path + '_hr.txt'
+        exec(cmd, function (error, stdout, stderr) {
+            console.log(cmd);
+            res.json({
+                "heartrate": stdout
+            })
             console.log(stdout);
-            console.log(stderr); 
-            var rm_wav = 'rm ../' + req.file.path
-    
-            exec(rm_wav, function (error, stdout, stderr) {
-                console.log(rm_wav);
+            console.log(stderr);
+            var rm_txt = 'rm ../' + req.file.path + '_hr.txt';    
+            exec(rm_txt, function (error, stdout, stderr) {
+                console.log(rm_txt);
                 console.log(stdout);
                 console.log(stderr); 
+                var rm_wav = 'rm ../' + req.file.path
+                exec(rm_wav, function (error, stdout, stderr) {
+                    console.log(rm_wav);
+                    console.log(stdout);
+                    console.log(stderr); 
+                });
             });
         });
     });
 
-    
-
-    
-    
     
 });
 
