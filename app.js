@@ -16,7 +16,7 @@ var router = express.Router();
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './public/recordings')
+        cb(null, './root/PulseServer/public/recordings')
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '.wav');
@@ -85,12 +85,12 @@ router.post('/file-upload', function (req, res) {
     } 
     //var cmd = 'SMILExtract -C config/demo/demo1\_energy.conf -I ' + '../' + req.file.path + ' -O ' + '../' + req.file.path + '.energy.csv';
 
-    var touch = 'touch ' + '../' + req.file.path + '_hr.txt';
+    var touch = 'touch ' + req.file.path + '_hr.txt';
     exec(touch, function (error, stdout, stderr) {
         console.log(touch);
         console.log(stdout);
         console.log(stderr);
-        var cmd = 'python predict.py ' + '../' + req.file.path + ' ' + '../' + req.file.path + '_hr.txt'
+        var cmd = 'python predict.py ' + req.file.path + ' ' + req.file.path + '_hr.txt'
         exec(cmd, function (error, stdout, stderr) {
             console.log(cmd);
             res.json({
@@ -98,12 +98,12 @@ router.post('/file-upload', function (req, res) {
             })
             console.log(stdout);
             console.log(stderr);
-            var rm_txt = 'rm ../' + req.file.path + '_hr.txt';    
+            var rm_txt = 'rm ' + req.file.path + '_hr.txt';    
             exec(rm_txt, function (error, stdout, stderr) {
                 console.log(rm_txt);
                 console.log(stdout);
                 console.log(stderr); 
-                var rm_wav = 'rm ../' + req.file.path
+                var rm_wav = 'rm ' + req.file.path
                 exec(rm_wav, function (error, stdout, stderr) {
                     console.log(rm_wav);
                     console.log(stdout);
@@ -115,6 +115,43 @@ router.post('/file-upload', function (req, res) {
 
     
 });
+
+router.post('/train', function (req, res) {
+    console.log('Received file ' + JSON.stringify(req.file.originalname) + ' as ' + req.file.filename);
+    try {
+        process.chdir('openSMILE-2.2rc1/');
+    } catch (err) {
+        console.log('chdir: ' + err);
+    } 
+
+    var id = " "
+    var hr = " "
+
+    var mk = 'mkdir -p ../users/' + id ;
+    exec(mk, function (error, stdout, stderr) {
+        console.log(mk);
+        console.log(stdout);
+        console.log(stderr);
+        var cp = 'cp ../' + req.file.path + ' ' + '../public/recordings/' + 'user=(' + id + ')_hr=(' + hr + ').wav'
+        var tempfile = '../users/' + id + '/' + req.file.filename + '.txt'
+        var model = '../users/' + id + '/' + id + '_' + 'libsvm.model' 
+        exec('test -e ' + model + ' || touch ' + model, function (error, stdout, stderr) {
+            console.log('touch ' + model);
+            console.log(stdout);
+            console.log(stderr);
+            exec(cp, function (error, stdout, stderr) {
+                console.log(cp);
+                console.log(stdout);
+                console.log(stderr);
+                exec('python createIndividualModel.py ../public/recordings/' + 'user=(' + id + ')_hr=(' + hr + ').wav ' + tempfile + ' ' + model, function (error, stdout, stderr) {
+                    console.log('python createIndividualModel.py ../public/recordings/' + 'user=(' + id + ')_hr=(' + hr + ').wav' + tempfile + ' ' + model);
+                    console.log(stdout);
+                    console.log(stderr);
+                }); 
+            });
+        }); 
+    }); 
+})
 
 module.exports = app;
 
