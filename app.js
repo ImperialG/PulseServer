@@ -78,11 +78,6 @@ app.use(function (err, req, res, next) {
 //POST Requests
 router.post('/file-upload', function (req, res) {
     console.log('Received file ' + JSON.stringify(req.file.originalname) + ' as ' + req.file.filename);
-    try {
-        process.chdir('openSMILE-2.2rc1/');
-    } catch (err) {
-        console.log('chdir: ' + err);
-    } 
     //var cmd = 'SMILExtract -C config/demo/demo1\_energy.conf -I ' + '../' + req.file.path + ' -O ' + '../' + req.file.path + '.energy.csv';
 
     var touch = 'touch ' + req.file.path + '_hr.txt';
@@ -90,7 +85,7 @@ router.post('/file-upload', function (req, res) {
         console.log(touch);
         console.log(stdout);
         console.log(stderr);
-        var cmd = 'python predict.py ' + req.file.path + ' ' + req.file.path + '_hr.txt'
+        var cmd = 'python openSMILE-2.2rc1/predict.py ' + req.file.path + ' ' + req.file.path + '_hr.txt'
         exec(cmd, function (error, stdout, stderr) {
             console.log(cmd);
             res.json({
