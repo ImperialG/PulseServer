@@ -16,7 +16,7 @@ var router = express.Router();
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './root/PulseServer/public/recordings')
+        cb(null, './public/recordings')
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '.wav');
