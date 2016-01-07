@@ -101,14 +101,12 @@ router.post('/file-upload', function (req, res) {
 
     var hr = 'head -n 1 ../' + req.file.path + '_hr.txt';
     
-    exec(hr, function (error, stdout, stderr) {
+    exec('node -v', function (error, stdout, stderr) {
         console.log(hr);
         console.log(stdout);
         console.log(stderr); 
-        var output = stderr.toString();
-        console.log(output);
           res.json({
-            "heartrate": output
+            "heartrate": stdout
           }); 
         //res.send(stdout.toString());
     })
