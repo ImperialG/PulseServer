@@ -80,6 +80,11 @@ router.post('/file-upload', function (req, res) {
     console.log('Received file ' + JSON.stringify(req.file.originalname) + ' as ' + req.file.filename);
     //var cmd = 'SMILExtract -C config/demo/demo1\_energy.conf -I ' + '../' + req.file.path + ' -O ' + '../' + req.file.path + '.energy.csv';
 
+    //TOLA: Access if the user want to use a personal model here
+    // console.log(req.body.usePersonalModel);
+    //req.body.usePersonalModel is a string  being {true | false}
+
+
     var touch = 'touch ' + req.file.path + '_hr.txt';
     exec(touch, function (error, stdout, stderr) {
         console.log(touch);
