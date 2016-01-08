@@ -7,7 +7,6 @@ import subprocess
 sys.path.append(lib_svm_path)
 from svmutil import *
 
-os.listdir(lib_svm_path)
 model_file = '/root/pulse/libsvm-3.20/Model/libsvm.model'
 svm_scale = '/root/pulse/libsvm-3.20/svm-scale'
 scale_file = '/root/pulse/libsvm-3.20/libsvm0_10.scale'
