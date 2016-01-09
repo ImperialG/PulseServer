@@ -1,4 +1,4 @@
-lib_svm_path = '/root/pulse/libsvm-3.20/python'
+lib_svm_path = 'libsvm-3.20/python'
 import sys
 import os
 import re
@@ -9,10 +9,10 @@ from subprocess import PIPE
 sys.path.append(lib_svm_path)
 from svmutil import *
 
-model_file = '/root/pulse/libsvm-3.20/Model/libsvm.model'
-#svm_scale = '/root/pulse/libsvm-3.20/svm-scale'
-scale_file = '/root/pulse/libsvm-3.20/scale_file'
-config_file = '/root/pulse/openSMILE-2.2rc1/config/gemaps/GeMAPSv01a.conf'
+model_file = 'libsvm-3.20/Model/libsvm.model'
+#svm_scale = 'libsvm-3.20/svm-scale'
+scale_file = 'libsvm-3.20/scale_file'
+config_file = 'openSMILE-2.2rc1/config/gemaps/GeMAPSv01a.conf'
 
 
 #given an instance file runs it through the model file to get predictions and 

@@ -1,4 +1,4 @@
-lib_svm_path = '/root/pulse/libsvm-3.20/python'
+lib_svm_path = 'libsvm-3.20/python'
 import sys
 import os
 import re
