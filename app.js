@@ -140,7 +140,7 @@ router.post('/train', function (req, res) {
         var cp = 'cp ../' + req.file.path + ' ' + 'public/recordings/' + 'user=(' + id + ')_hr=(' + hr + ').wav'
         var tempfile = 'users/' + id + '/' + req.file.filename + '.txt'
         var model = 'users/' + id + '/libsvm.model' 
-        exec('test -e ' + model + ' || touch ' + model, function (error, stdout, stderr) {
+        exec('test -e ' + model + ' || cp libsvm-3.20/Model/libsvm.model ' + model, function (error, stdout, stderr) {
             console.log('touch ' + model);
             console.log(stdout);
             console.log(stderr);
@@ -152,6 +152,7 @@ router.post('/train', function (req, res) {
                     console.log('python createIndividualModel.py public/recordings/' + 'user=(' + id + ')_hr=(' + hr + ').wav' + tempfile + ' ' + model);
                     console.log(stdout);
                     console.log(stderr);
+                    res.send('Trained!');
                 }); 
             });
         }); 
