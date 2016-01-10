@@ -98,6 +98,8 @@ router.post('/file-upload', function (req, res) {
         } else if (usePersonal === 'true') {
             var usrmodel = '/users/' + id + '/libsvm.model' 
             var cmd = 'python predict.py ' + req.file.path + ' ' + usrmodel + '  ' + req.file.path + '_hr.txt'
+        } else {
+            res.send("usePersonalModel field not specified");
         }
         exec(cmd, function (error, stdout, stderr) {
             console.log(cmd);
@@ -120,8 +122,6 @@ router.post('/file-upload', function (req, res) {
             });
         });
     });
-
-    } 
 
     
 });
