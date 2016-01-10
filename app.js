@@ -96,7 +96,7 @@ router.post('/file-upload', function (req, res) {
         if (usePersonal === 'false') {
             var cmd = 'python predict.py ' + req.file.path + ' ' + req.file.path + '_hr.txt'
         } else if (usePersonal === 'true') {
-            var usrmodel = '/users/' + id + '/libsvm.model' 
+            var usrmodel = 'users/' + id + '/libsvm.model' 
             var cmd = 'python predict.py ' + req.file.path + ' ' + usrmodel + '  ' + req.file.path + '_hr.txt'
         } else {
             res.send("usePersonalModel field not specified");
@@ -141,15 +141,16 @@ router.post('/train', function (req, res) {
         var tempfile = 'users/' + id + '/' + req.file.filename + '.txt'
         var model = 'users/' + id + '/libsvm.model' 
         exec('test -e ' + model + ' || cp libsvm-3.20/Model/libsvm.model ' + model, function (error, stdout, stderr) {
-            console.log('touch ' + model);
+            console.log('test -e ' + model + ' || cp libsvm-3.20/Model/libsvm.model ' + model);
             console.log(stdout);
             console.log(stderr);
             exec(cp, function (error, stdout, stderr) {
                 console.log(cp);
                 console.log(stdout);
                 console.log(stderr);
-                exec('python createIndividualModel.py public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav ' + tempfile + ' ' + model, function (error, stdout, stderr) {
-                    console.log('python createIndividualModel.py public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav' + tempfile + ' ' + model);
+                var train = 'python createIndividualModel.py public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav ' + tempfile + ' ' + model
+                exec(train, function (error, stdout, stderr) {
+                    console.log(train);
                     console.log(stdout);
                     console.log(stderr);
                     res.send('Trained!');
