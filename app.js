@@ -76,38 +76,44 @@ app.use(function (err, req, res, next) {
 //GET Requests
 
 //POST Requests
+
+/* 
+ *  Method Name: File-Upload
+ *  Description: This method handles the heart rate estimation
+ */
 router.post('/file-upload', function (req, res) {
     console.log('Received file ' + JSON.stringify(req.file.originalname) + ' as ' + req.file.filename);
-    //var cmd = 'SMILExtract -C config/demo/demo1\_energy.conf -I ' + '../' + req.file.path + ' -O ' + '../' + req.file.path + '.energy.csv';
-
-    //TOLA: Access if the user want to use a personal model here
-    // console.log(req.body.usePersonalModel);
-    //req.body.usePersonalModel is a string  being {true | false}
-
+    
+    //req.body.usePersonalModel is a string being {true | false} to specify user dependent or independent model
     var usePersonal = req.body.usePersonalModel
+    //phoneID is an alphanumeric string unique to each individual android device
     var id = req.body.phoneID;
     
-
+    //Create temporary file for use in predict.py
     var touch = 'touch ' + req.file.path + '_hr.txt';
     exec(touch, function (error, stdout, stderr) {
         console.log(touch);
         console.log(stdout);
         console.log(stderr);
+        //Select usermodel or general model depending on usePersonal flag
         if (usePersonal === 'false') {
             var cmd = 'python predict.py ' + req.file.path + ' ' + req.file.path + '_hr.txt'
         } else if (usePersonal === 'true') {
             var usrmodel = 'users/' + id + '/libsvm.model' 
-            var cmd = 'python predict.py ' + req.file.path + ' ' + usrmodel + '  ' + req.file.path + '_hr.txt'
+            var cmd = 'python predict.py ' + req.file.path + ' ' + usrmodel + ' ' + req.file.path + '_hr.txt'
         } else {
             res.send("usePersonalModel field not specified");
         }
+        //Execute predict.py
         exec(cmd, function (error, stdout, stderr) {
             console.log(cmd);
+            //Return heartrate as res
             res.json({
                 "heartrate": stdout
             })
             console.log(stdout);
             console.log(stderr);
+            //Delete temporary and audio file
             var rm_txt = 'rm ' + req.file.path + '_hr.txt';    
             exec(rm_txt, function (error, stdout, stderr) {
                 console.log(rm_txt);
@@ -121,39 +127,62 @@ router.post('/file-upload', function (req, res) {
                 });
             });
         });
-    });
-
-    
+    });  
 });
 
+/* 
+ *  Method Name: Train
+ *  Description: This method handles the user model training
+ */
 router.post('/train', function (req, res) {
     console.log('Received file ' + JSON.stringify(req.file.originalname) + ' as ' + req.file.filename);
 
+    //phoneID is an alphanumeric unique to each individual android device
     var id = req.body.phoneID;
+    //user logs their heartrate when the audio was recorded
     var hr = req.body.heartrate;
 
+    //Create a new directory in users for this user if one does not exist
     var mk = 'mkdir -p users/' + id ;
     exec(mk, function (error, stdout, stderr) {
         console.log(mk);
         console.log(stdout);
         console.log(stderr);
-        var cp = 'cp ' + req.file.path + ' ' + 'public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav'
-        var tempfile = 'users/' + id + '/' + req.file.filename + '.txt'
+        //Copy the generic model into this user's directory if they do not have one
         var model = 'users/' + id + '/libsvm.model' 
         exec('test -e ' + model + ' || cp libsvm-3.20/Model/libsvm.model ' + model, function (error, stdout, stderr) {
             console.log('test -e ' + model + ' || cp libsvm-3.20/Model/libsvm.model ' + model);
             console.log(stdout);
             console.log(stderr);
+            //Copy the audio to an audio with the right format for processing
+            var cp = 'cp ' + req.file.path + ' ' + 'public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav'
             exec(cp, function (error, stdout, stderr) {
                 console.log(cp);
                 console.log(stdout);
                 console.log(stderr);
+                //Create a temporary file for the python script to use in processing
+                var tempfile = 'users/' + id + '/' + req.file.filename + '.txt'
+                //createIndividualModel overwrites the existing model with a new trained one
                 var train = 'python createIndividualModel.py public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav ' + tempfile + ' ' + model
                 exec(train, function (error, stdout, stderr) {
                     console.log(train);
                     console.log(stdout);
                     console.log(stderr);
-                    res.send('Trained!');
+                    res.send('Training Complete');
+                    //Remove files no longer needed
+                    var rm_wav1 = 'rm ' + req.file.path
+                    exec(rm_wav, function (error, stdout, stderr) {
+                        console.log(rm_wav);
+                        console.log(stdout);
+                        console.log(stderr); 
+                        var rm_txt = 'rm ' + tempfile
+                        exec(rm_txt, function (error, stdout, stderr) {
+                            console.log(rm_txt);
+                            console.log(stdout);
+                            console.log(stderr); 
+                            var rm_wav2 = 'rm public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav'
+                        });
+                    });
                 }); 
             });
         }); 
