@@ -170,7 +170,7 @@ router.post('/train', function (req, res) {
                     console.log(stderr);
                     res.send('Training Complete');
                     //Remove files no longer needed
-                    var rm_wav1 = 'rm ' + req.file.path
+                    var rm_wav = 'rm ' + req.file.path
                     exec(rm_wav, function (error, stdout, stderr) {
                         console.log(rm_wav);
                         console.log(stdout);
@@ -181,6 +181,11 @@ router.post('/train', function (req, res) {
                             console.log(stdout);
                             console.log(stderr); 
                             var rm_wav2 = 'rm public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav'
+                            exec(rm_wav2, function (error, stdout, stderr) {
+                                console.log(rm_wav2);
+                                console.log(stdout);
+                                console.log(stderr); 
+                            });
                         });
                     });
                 }); 
