@@ -1,4 +1,4 @@
-lib_svm_path = 'libsvm-3.20/python'
+lib_svm_path = '/home/sinduran/Downloads/libsvm-3.20/python'
 import sys
 import os
 import re
@@ -9,8 +9,8 @@ from subprocess import PIPE
 sys.path.append(lib_svm_path)
 from svmutil import *
 
-config_file = 'openSMILE-2.2rc1/config/gemaps/GeMAPSv01a.conf'
-scale_file = 'libsvm-3.20/scale_file'
+config_file = '/home/sinduran/Downloads/openSMILE-2.2rc1/config/gemaps/GeMAPSv01a.conf'
+scale_file = '/home/sinduran/testFolder/scale_file'
 
 #trains the model using the data file and saves it to modelpath
 def trainModel(dataFilePath,modelFilePath):
@@ -22,7 +22,7 @@ def trainModel(dataFilePath,modelFilePath):
 #runs opensmile on wav_file and writes output to out_file
 def openSmile(wav_file,out_file):
   FNULL = open(os.devnull, 'w')
-  subprocess.call(['openSMILE-2.2rc1/inst/bin/SMILExtract',"-C",str(config_file),"-I",str(wav_file),"-O",str(out_file)],stdout=FNULL, stderr=subprocess.STDOUT)
+  subprocess.call(['SMILExtract',"-C",str(config_file),"-I",str(wav_file),"-O",str(out_file)],stdout=FNULL, stderr=subprocess.STDOUT)
 
 #removes unneccessary info from in_file and prepares data to be in readable from for libsvm
 #and appends it to processed_file
@@ -71,7 +71,7 @@ def scale_val(min,max,a,b,x):
 def getHeartRate(filepath):
   base = os.path.basename(filepath)
   print base
-  pattern = 'user=\d+_hr=(\d+.?\d*).wav'
+  pattern = 'user=\w+_hr=(\d+.?\d*).wav'
   pat = re.search(pattern,filepath)
   if(pat):
     return pat.groups()[0]

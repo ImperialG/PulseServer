@@ -97,10 +97,10 @@ router.post('/file-upload', function (req, res) {
         console.log(stderr);
         //Select usermodel or general model depending on usePersonal flag
         if (usePersonal === 'false') {
-            var cmd = 'python predict.py ' + req.file.path + ' ' + req.file.path + '_hr.txt'
+            var cmd = 'python scripts/predict.py ' + req.file.path + ' ' + req.file.path + '_hr.txt'
         } else if (usePersonal === 'true') {
             var usrmodel = 'users/' + id + '/libsvm.model' 
-            var cmd = 'python predict.py ' + req.file.path + ' ' + usrmodel + ' ' + req.file.path + '_hr.txt'
+            var cmd = 'python scripts/predict.py ' + req.file.path + ' ' + usrmodel + ' ' + req.file.path + '_hr.txt'
         } else {
             res.send("usePersonalModel field not specified");
         }
@@ -163,7 +163,7 @@ router.post('/train', function (req, res) {
                 //Create a temporary file for the python script to use in processing
                 var tempfile = 'users/' + id + '/' + req.file.filename + '.txt'
                 //createIndividualModel overwrites the existing model with a new trained one
-                var train = 'python createIndividualModel.py public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav ' + tempfile + ' ' + model
+                var train = 'python scripts/createIndividualModel.py public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav ' + tempfile + ' ' + model
                 exec(train, function (error, stdout, stderr) {
                     console.log(train);
                     console.log(stdout);
