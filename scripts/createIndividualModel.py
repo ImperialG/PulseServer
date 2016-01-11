@@ -22,7 +22,7 @@ def trainModel(dataFilePath,modelFilePath):
 #runs opensmile on wav_file and writes output to out_file
 def openSmile(wav_file,out_file):
   FNULL = open(os.devnull, 'w')
-  subprocess.call(['SMILExtract',"-C",str(config_file),"-I",str(wav_file),"-O",str(out_file)],stdout=FNULL, stderr=subprocess.STDOUT)
+  subprocess.call(['../openSMILE-2.2rc1/inst/bin/SMILExtract',"-C",str(config_file),"-I",str(wav_file),"-O",str(out_file)],stdout=FNULL, stderr=subprocess.STDOUT)
 
 #removes unneccessary info from in_file and prepares data to be in readable from for libsvm
 #and appends it to processed_file
