@@ -162,29 +162,35 @@ router.post('/train', function (req, res) {
                 console.log(stderr);
                 //Create a temporary file for the python script to use in processing
                 var tempfile = 'users/' + id + '/' + req.file.filename + '.txt'
-                //createIndividualModel overwrites the existing model with a new trained one
-                var train = 'python createIndividualModel.py public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav ' + tempfile + ' ' + model
-                exec(train, function (error, stdout, stderr) {
-                    console.log(train);
+                var createTemp = 'touch ' + tempfile;
+                exec(createTemp, function (error, stdout, stderr) {
+                    console.log(createTemp);
                     console.log(stdout);
                     console.log(stderr);
-                    res.send('Training Complete');
-                    //Remove files no longer needed
-                    var rm_wav = 'rm ' + req.file.path
-                    exec(rm_wav, function (error, stdout, stderr) {
-                        console.log(rm_wav);
+                    //createIndividualModel overwrites the existing model with a new trained one
+                    var train = 'python createIndividualModel.py public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav ' + tempfile + ' ' + model
+                    exec(train, function (error, stdout, stderr) {
+                        console.log(train);
                         console.log(stdout);
-                        console.log(stderr); 
-                        var rm_txt = 'rm ' + tempfile
-                        exec(rm_txt, function (error, stdout, stderr) {
-                            console.log(rm_txt);
+                        console.log(stderr);
+                        res.send('Training Complete');
+                        //Remove files no longer needed
+                        var rm_wav = 'rm ' + req.file.path
+                        exec(rm_wav, function (error, stdout, stderr) {
+                            console.log(rm_wav);
                             console.log(stdout);
                             console.log(stderr); 
-                            var rm_wav2 = 'rm public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav'
-                            exec(rm_wav2, function (error, stdout, stderr) {
-                                console.log(rm_wav2);
+                            var rm_txt = 'rm ' + tempfile
+                                exec(rm_txt, function (error, stdout, stderr) {
+                                console.log(rm_txt);
                                 console.log(stdout);
                                 console.log(stderr); 
+                                var rm_wav2 = 'rm public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav'
+                                exec(rm_wav2, function (error, stdout, stderr) {
+                                    console.log(rm_wav2);
+                                    console.log(stdout);
+                                    console.log(stderr); 
+                                });
                             });
                         });
                     });
