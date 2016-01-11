@@ -1,4 +1,4 @@
-lib_svm_path = '/home/sinduran/Downloads/libsvm-3.20/python'
+lib_svm_path = '../libsvm-3.20/python'
 import sys
 import os
 import re
@@ -9,8 +9,8 @@ from subprocess import PIPE
 sys.path.append(lib_svm_path)
 from svmutil import *
 
-config_file = '/home/sinduran/Downloads/openSMILE-2.2rc1/config/gemaps/GeMAPSv01a.conf'
-scale_file = '/home/sinduran/testFolder/scale_file'
+config_file = '../openSMILE-2.2rc1/config/gemaps/GeMAPSv01a.conf'
+scale_file = '../libsvm-3.20/scale_file'
 
 #trains the model using the data file and saves it to modelpath
 def trainModel(dataFilePath,modelFilePath):
