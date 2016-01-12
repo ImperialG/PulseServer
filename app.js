@@ -139,7 +139,7 @@ router.post('/file-upload', function (req, res) {
 router.post('/file-upload-test', function (req, res) {
     var ans = 70 + (10 * Math.random());
     res.json({
-        "heartrate": ans;
+        "heartrate": ans
     })
 });
 /* 
