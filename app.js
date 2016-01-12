@@ -106,11 +106,6 @@ router.post('/file-upload', function (req, res) {
         }
         var model = 'users/' + id + '/libsvm.model' 
         //Execute predict.py
-        exec('mkdir -p users/' + id, function (error, stdout, stderr) {
-            exec('test -e ' + model + ' || cp libsvm-3.20/Model/libsvm.model ' + model, function (error, stdout, stderr) {
-
-            }); 
-        });
         exec(cmd, function (error, stdout, stderr) {
             console.log(cmd);
             //Return heartrate as res
@@ -124,13 +119,13 @@ router.post('/file-upload', function (req, res) {
             exec(rm_txt, function (error, stdout, stderr) {
                 console.log(rm_txt);
                 console.log(stdout);
-                console.log(stderr); /* 
+                console.log(stderr); 
                 var rm_wav = 'rm ' + req.file.path
                 exec(rm_wav, function (error, stdout, stderr) {
                     console.log(rm_wav);
                     console.log(stdout);
                     console.log(stderr); 
-                }); */
+                }); 
             });
         });
     });  
@@ -153,6 +148,7 @@ router.post('/train', function (req, res) {
     var id = req.body.phoneID;
     //user logs their heartrate when the audio was recorded
     var hr = req.body.heartrate;
+    console.log(hr);
 
     //Create a new directory in users for this user if one does not exist
     var mk = 'mkdir -p users/' + id ;
@@ -173,8 +169,8 @@ router.post('/train', function (req, res) {
                 console.log(stdout);
                 console.log(stderr);
                 //Create a temporary file for the python script to use in processing
-                var tempfile = 'users/' + id + '/' + req.file.filename + '.txt'
-                var createTemp = 'touch ' + tempfile;
+                var tempfile = 'users/' + id + '/tempfile.txt'
+                var createTemp = ' test -e ' + tempfile + ' || touch ' + tempfile;
                 exec(createTemp, function (error, stdout, stderr) {
                     console.log(createTemp);
                     console.log(stdout);
@@ -185,23 +181,20 @@ router.post('/train', function (req, res) {
                         console.log(train);
                         console.log(stdout);
                         console.log(stderr);
-                        res.send('Training Complete');
+                        
                         //Remove files no longer needed
                         var rm_wav = 'rm ' + req.file.path
                         exec(rm_wav, function (error, stdout, stderr) {
                             console.log(rm_wav);
                             console.log(stdout);
                             console.log(stderr); 
-                            var rm_txt = 'rm ' + tempfile
-                                exec(rm_txt, function (error, stdout, stderr) {
-                                console.log(rm_txt);
-                                console.log(stdout);
-                                console.log(stderr); 
+                            
                                 var rm_wav2 = 'rm public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav'
                                 exec(rm_wav2, function (error, stdout, stderr) {
                                     console.log(rm_wav2);
                                     console.log(stdout);
                                     console.log(stderr); 
+                                    res.send('Training Complete');
                                 });
                             });
                         });
