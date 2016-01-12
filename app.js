@@ -100,7 +100,7 @@ router.post('/file-upload', function (req, res) {
             var cmd = 'python predict.py ' + req.file.path + ' ' + req.file.path + '_hr.txt'
         } else if (usePersonal === 'true') {
             var usrmodel = 'users/' + id + '/libsvm.model' 
-            var cmd = 'python predict.py ' + req.file.path + ' ' + req.file.path + '_hr.txt' + ' ' usrmodel
+            var cmd = 'python predict.py ' + req.file.path + ' ' + req.file.path + '_hr.txt' + ' ' + usrmodel
         } else {
             res.send("usePersonalModel field not specified");
         }
