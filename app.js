@@ -196,7 +196,6 @@ router.post('/train', function (req, res) {
                                     console.log(stderr); 
                                     res.send('Training Complete');
                                 });
-                            });
                         });
                     });
                 }); 
