@@ -86,6 +86,7 @@ router.post('/file-upload', function (req, res) {
     
     //req.body.usePersonalModel is a string being {true | false} to specify user dependent or independent model
     var usePersonal = req.body.usePersonalModel
+    console.log('usePersonalModel');
     //phoneID is an alphanumeric string unique to each individual android device
     var id = req.body.phoneID;
     
@@ -96,14 +97,14 @@ router.post('/file-upload', function (req, res) {
         console.log(stdout);
         console.log(stderr);
         //Select usermodel or general model depending on usePersonal flag
-        if (usePersonal === 'false') {
+        //if (usePersonal === 'false') {
             var cmd = 'python predict.py ' + req.file.path + ' ' + req.file.path + '_hr.txt'
-        } else if (usePersonal === 'true') {
-            var usrmodel = 'users/' + id + '/libsvm.model' 
-            var cmd = 'python predict.py ' + req.file.path + ' ' + usrmodel + ' ' + req.file.path + '_hr.txt'
-        } else {
-            res.send("usePersonalModel field not specified");
-        }
+        //} else if (usePersonal === 'true') {
+        //    var usrmodel = 'users/' + id + '/libsvm.model' 
+        //    var cmd = 'python predict.py ' + req.file.path + ' ' + usrmodel + ' ' + req.file.path + '_hr.txt'
+        //} else {
+        //    res.send("usePersonalModel field not specified");
+        //}
         //Execute predict.py
         exec(cmd, function (error, stdout, stderr) {
             console.log(cmd);
@@ -114,18 +115,14 @@ router.post('/file-upload', function (req, res) {
             console.log(stdout);
             console.log(stderr);
             //Delete temporary and audio file
-            var rm_txt = 'rm ' + req.file.path + '_hr.txt';    
-            exec(rm_txt, function (error, stdout, stderr) {
-                console.log(rm_txt);
-                console.log(stdout);
-                console.log(stderr); 
+            //var rm_txt = 'rm ' + req.file.path + '_hr.txt';    
+            
                 var rm_wav = 'rm ' + req.file.path
                 exec(rm_wav, function (error, stdout, stderr) {
                     console.log(rm_wav);
                     console.log(stdout);
                     console.log(stderr); 
                 });
-            });
         });
     });  
 });
