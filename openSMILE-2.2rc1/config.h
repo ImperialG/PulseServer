@@ -91,10 +91,10 @@
 #define WITH_LIVEREC 1
 
 /* No getline implementation on Mac */
-#define __HAVENT_GNULIBS 1
+/* #undef __HAVENT_GNULIBS */
 
 /* Compile on Macs */
-#define __MACOS 1
+/* #undef __MACOS */
 
 /* Compile on MinGW32-Msys */
 /* #undef __MINGW */

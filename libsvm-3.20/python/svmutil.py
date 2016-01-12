@@ -249,14 +249,15 @@ def svm_predict(y, x, m, options=""):
 			pred_labels += [label]
 			pred_values += [values]
 
-	ACC, MSE, SCC = evaluations(y, pred_labels)
-	l = len(y)
-	if svm_type in [EPSILON_SVR, NU_SVR]:
-		info("Mean squared error = %g (regression)" % MSE)
-		info("Squared correlation coefficient = %g (regression)" % SCC)
-	else:
-		info("Accuracy = %g%% (%d/%d) (classification)" % (ACC, int(l*ACC/100), l))
+#	ACC, MSE, SCC = evaluations(y, pred_labels)
+#        return pred_labels, 0, 0
+#	l = len(y)
+#	if svm_type in [EPSILON_SVR, NU_SVR]:
+#		info("Mean squared error = %g (regression)" % MSE)
+#		info("Squared correlation coefficient = %g (regression)" % SCC)
+#	else:
+#		info("Accuracy = %g%% (%d/%d) (classification)" % (ACC, int(l*ACC/100), l))
 
-	return pred_labels, (ACC, MSE, SCC), pred_values
 
-
+#	return pred_labels, (ACC, MSE, SCC), pred_values
+        return pred_labels,0,0
