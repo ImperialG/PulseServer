@@ -104,7 +104,13 @@ router.post('/file-upload', function (req, res) {
         } else {
             res.send("usePersonalModel field not specified");
         }
+        var model = 'users/' + id + '/libsvm.model' 
         //Execute predict.py
+        exec('mkdir -p users/' + id, function (error, stdout, stderr) {
+            exec('test -e ' + model + ' || cp libsvm-3.20/Model/libsvm.model ' + model, function (error, stdout, stderr) {
+
+            }); 
+        });
         exec(cmd, function (error, stdout, stderr) {
             console.log(cmd);
             //Return heartrate as res
@@ -118,18 +124,24 @@ router.post('/file-upload', function (req, res) {
             exec(rm_txt, function (error, stdout, stderr) {
                 console.log(rm_txt);
                 console.log(stdout);
-                console.log(stderr); 
+                console.log(stderr); /* 
                 var rm_wav = 'rm ' + req.file.path
                 exec(rm_wav, function (error, stdout, stderr) {
                     console.log(rm_wav);
                     console.log(stdout);
                     console.log(stderr); 
-                });
+                }); */
             });
         });
     });  
 });
 
+router.post('/file-upload-test', function (req, res) {
+    var ans = 70 + (10 * Math.random());
+    res.json({
+        "heartrate": ans;
+    })
+});
 /* 
  *  Method Name: Train
  *  Description: This method handles the user model training
