@@ -147,8 +147,7 @@ router.post('/train', function (req, res) {
     //phoneID is an alphanumeric unique to each individual android device
     var id = req.body.phoneID;
     //user logs their heartrate when the audio was recorded
-    var hr = req.body.heartrate;
-    console.log(hr);
+    var hr = req.body.estimatedHR;
 
     //Create a new directory in users for this user if one does not exist
     var mk = 'mkdir -p users/' + id ;
@@ -170,12 +169,12 @@ router.post('/train', function (req, res) {
                 console.log(stderr);
                 //Create a temporary file for the python script to use in processing
                 var tempfile = 'users/' + id + '/tempfile.txt'
-                var createTemp = ' test -e ' + tempfile + ' || touch ' + tempfile;
+/*                var createTemp = ' test -e ' + tempfile + ' || touch ' + tempfile;
                 exec(createTemp, function (error, stdout, stderr) {
                     console.log(createTemp);
                     console.log(stdout);
                     console.log(stderr);
-                    //createIndividualModel overwrites the existing model with a new trained one
+*/                    //createIndividualModel overwrites the existing model with a new trained one
                     var train = 'python createIndividualModel.py public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav ' + tempfile + ' ' + model
                     exec(train, function (error, stdout, stderr) {
                         console.log(train);
@@ -198,7 +197,7 @@ router.post('/train', function (req, res) {
                                 });
                         });
                     });
-                }); 
+                //}); 
             });
         }); 
     }); 

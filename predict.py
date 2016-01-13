@@ -73,10 +73,11 @@ def write(out,line,scale,hr):
 def scale_val(min,max,a,b,x):
   return a + ((b-a)*(x-min)/(max-min))
 
-if (len(sys.argv) > 3):
+if (len(sys.argv) > 3 and os.path.isfile(sys.argv[3]):
+  print "UPDATING MODEL"
   model_file = sys.argv[3]
 
-if(len(sys.argv) >= 1):
+if(len(sys.argv) > 1):
   tempfile1 = tempfile.NamedTemporaryFile()
   tempfile1.seek(0)
   openSmile(sys.argv[1],tempfile1.name)
@@ -89,6 +90,6 @@ if(len(sys.argv) >= 1):
   hr = makePrediction(tempfile2.name)[0]
   hr = round(hr,0)
   print hr
-  if(len(sys.argv) >= 2):
+  if(len(sys.argv) > 2):
     with open(sys.argv[2],'w+') as f:
       f.write(str(hr))
