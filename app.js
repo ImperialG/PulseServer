@@ -120,12 +120,12 @@ router.post('/file-upload', function (req, res) {
                 console.log(rm_txt);
                 console.log(stdout);
                 console.log(stderr); 
-                var rm_wav = 'rm ' + req.file.path
+               /* var rm_wav = 'rm ' + req.file.path
                 exec(rm_wav, function (error, stdout, stderr) {
                     console.log(rm_wav);
                     console.log(stdout);
                     console.log(stderr); 
-                }); 
+                });*/ 
             });
         });
     });  
@@ -157,8 +157,8 @@ router.post('/train', function (req, res) {
         console.log(stderr);
         //Copy the generic model into this user's directory if they do not have one
         var model = 'users/' + id + '/libsvm.model' 
-        exec('test -e ' + model + ' || cp libsvm-3.20/Model/libsvm.model ' + model, function (error, stdout, stderr) {
-            console.log('test -e ' + model + ' || cp libsvm-3.20/Model/libsvm.model ' + model);
+//        exec('test -e ' + model + ' || cp libsvm-3.20/Model/libsvm.model ' + model, function (error, stdout, stderr) {
+//            console.log('test -e ' + model + ' || cp libsvm-3.20/Model/libsvm.model ' + model);
             console.log(stdout);
             console.log(stderr);
             //Copy the audio to an audio with the right format for processing
@@ -169,37 +169,38 @@ router.post('/train', function (req, res) {
                 console.log(stderr);
                 //Create a temporary file for the python script to use in processing
                 var tempfile = 'users/' + id + '/tempfile.txt'
-/*                var createTemp = ' test -e ' + tempfile + ' || touch ' + tempfile;
-                exec(createTemp, function (error, stdout, stderr) {
-                    console.log(createTemp);
+//                var createTemp = ' test -e ' + tempfile + ' || touch ' + tempfile;
+//                exec(createTemp, function (error, stdout, stderr) {
+                    //console.log(createTemp);
                     console.log(stdout);
                     console.log(stderr);
-*/                    //createIndividualModel overwrites the existing model with a new trained one
-                    var train = 'python createIndividualModel.py public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav ' + tempfile + ' ' + model
+                    //createIndividualModel overwrites the existing model with a new trained one
+                    var train = 'python createIndividualModel.py public/recordings/' + req.file.path + ' '+ hr + ' ' + tempfile + ' ' + model
                     exec(train, function (error, stdout, stderr) {
                         console.log(train);
                         console.log(stdout);
                         console.log(stderr);
                         
                         //Remove files no longer needed
-                        var rm_wav = 'rm ' + req.file.path
+                        /*var rm_wav = 'rm ' + req.file.path
                         exec(rm_wav, function (error, stdout, stderr) {
                             console.log(rm_wav);
                             console.log(stdout);
                             console.log(stderr); 
                             
-                                var rm_wav2 = 'rm public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav'
+                              /*  var rm_wav2 = 'rm public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav'
                                 exec(rm_wav2, function (error, stdout, stderr) {
                                     console.log(rm_wav2);
                                     console.log(stdout);
                                     console.log(stderr); 
                                     res.send('Training Complete');
                                 });
-                        });
+
+                        });*/
                     });
-                //}); 
+                // }); 
             });
-        }); 
+//        }); 
     }); 
 })
 

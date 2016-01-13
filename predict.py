@@ -73,8 +73,8 @@ def write(out,line,scale,hr):
 def scale_val(min,max,a,b,x):
   return a + ((b-a)*(x-min)/(max-min))
 
-if (len(sys.argv) > 3 and os.path.isfile(sys.argv[3]):
-  print "UPDATING MODEL"
+if (len(sys.argv) > 3 and os.path.isfile(sys.argv[3])):
+
   model_file = sys.argv[3]
 
 if(len(sys.argv) > 1):

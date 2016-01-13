@@ -40,6 +40,7 @@ def processOpenSmile(hr,inFile,processedFile):
 def edit(file):
   pattern = r'\'unknown\'.*' #if line starts with 'unknown' then return line else None
   for line in file:
+
     if re.search(pattern, line):
       return line[:-1];
   return None;
@@ -78,23 +79,24 @@ def getHeartRate(filepath):
   else:
     return None           
  
-if(len(sys.argv) >= 3):
+if(len(sys.argv) > 3):
   #arg 1 input wav file path
-  #arg 2 file which contains instances
-  #arg 3 modelfilepath
+  #arg 2 HEART RATE
+  #arg 3 file which contains instances
+  #arg 4 modelfilepath
   wavFile = sys.argv[1]
-  instanceFile = sys.argv[2]
-  modelFile = sys.argv[3]
-  hr = getHeartRate(wavFile) #get nearest integer
+  instanceFile = sys.argv[3]
+  modelFile = sys.argv[4]
+  hr = float(sys.argv[2])
   if hr != None:
     hr = int(round(float(hr),0))
     tempfile1 = tempfile.NamedTemporaryFile()
     tempfile1.seek(0)
     openSmile(wavFile,tempfile1.name)
- #   with open(instanceFile,'a') as instance:
- #     processOpenSmile(hr,tempfile1,instance)
+    with open(instanceFile,'a') as instance:
+      processOpenSmile(hr,tempfile1,instance)
     tempfile1.close()
-  #  trainModel(instanceFile,modelFile)
+    trainModel(instanceFile,modelFile)
   else:
     print "failed to retrieve heart rate from file"
 else:
