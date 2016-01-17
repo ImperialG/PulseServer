@@ -22,7 +22,7 @@ def trainModel(dataFilePath,modelFilePath):
 #runs opensmile on wav_file and writes output to out_file
 def openSmile(wav_file,out_file):
   FNULL = open(os.devnull, 'w')
-  subprocess.call(['openSMILE-2.2rc1/inst/bin/SMILExtract',"-C",str(config_file),"-I",str(wav_file),"-O",str(out_file)],stdout=FNULL, stderr=subprocess.STDOUT)
+  return subprocess.call(['openSMILE-2.2rc1/inst/bin/SMILExtract',"-C",str(config_file),"-I",str(wav_file),"-O",str(out_file)])
 
 #removes unneccessary info from in_file and prepares data to be in readable from for libsvm
 #and appends it to processed_file
@@ -92,11 +92,13 @@ if(len(sys.argv) > 3):
     hr = int(round(float(hr),0))
     tempfile1 = tempfile.NamedTemporaryFile()
     tempfile1.seek(0)
-    openSmile(wavFile,tempfile1.name)
-    with open(instanceFile,'a') as instance:
-      processOpenSmile(hr,tempfile1,instance)
-    tempfile1.close()
-    trainModel(instanceFile,modelFile)
+    if openSmile(wavFile,tempfile1.name)==0:
+      with open(instanceFile,'a') as instance:
+        processOpenSmile(hr,tempfile1,instance)
+      tempfile1.close()
+      trainModel(instanceFile,modelFile)
+    else:
+      tempfile1.close()
   else:
     print "failed to retrieve heart rate from file"
 else:

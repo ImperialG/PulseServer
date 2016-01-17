@@ -120,12 +120,12 @@ router.post('/file-upload', function (req, res) {
                 console.log(rm_txt);
                 console.log(stdout);
                 console.log(stderr); 
-               /* var rm_wav = 'rm ' + req.file.path
+                /*var rm_wav = 'rm ' + req.file.path
                 exec(rm_wav, function (error, stdout, stderr) {
                     console.log(rm_wav);
                     console.log(stdout);
                     console.log(stderr); 
-                });*/ 
+                });*/
             });
         });
     });  
@@ -162,12 +162,12 @@ router.post('/train', function (req, res) {
             console.log(stdout);
             console.log(stderr);
             //Copy the audio to an audio with the right format for processing
-            var cp = 'cp ' + req.file.path + ' ' + 'public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav'
+/*            var cp = 'cp ' + req.file.path + ' ' + 'public/recordings/' + 'user=' + id + '_hr=' + hr + '.wav'
             exec(cp, function (error, stdout, stderr) {
                 console.log(cp);
                 console.log(stdout);
                 console.log(stderr);
-                //Create a temporary file for the python script to use in processing
+*/                //Create a temporary file for the python script to use in processing
                 var tempfile = 'users/' + id + '/tempfile.txt'
 //                var createTemp = ' test -e ' + tempfile + ' || touch ' + tempfile;
 //                exec(createTemp, function (error, stdout, stderr) {
@@ -175,7 +175,7 @@ router.post('/train', function (req, res) {
                     console.log(stdout);
                     console.log(stderr);
                     //createIndividualModel overwrites the existing model with a new trained one
-                    var train = 'python createIndividualModel.py public/recordings/' + req.file.path + ' '+ hr + ' ' + tempfile + ' ' + model
+                    var train = 'python createIndividualModel.py ' + req.file.path + ' '+ hr + ' ' + tempfile + ' ' + model
                     exec(train, function (error, stdout, stderr) {
                         console.log(train);
                         console.log(stdout);
@@ -197,7 +197,7 @@ router.post('/train', function (req, res) {
                                 });
 
                         });*/
-                    });
+//                    });
                 // }); 
             });
 //        }); 
